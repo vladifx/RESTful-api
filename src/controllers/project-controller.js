@@ -5,6 +5,7 @@ class ProjectController {
     async createProject(request, reply) {
         try {
             const { projectManager } = request.body;
+
             const newProject = await ProjectService.createProject(projectManager, request.body);
 
             reply.send(newProject);
