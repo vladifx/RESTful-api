@@ -3,25 +3,14 @@ import User from "../models/user-model.js";
 
 class ProjectService {
 
-    async createProject(projectManager, teamMembers, projectData) {
+    async createProject(projectManager, projectData) {
         const projectManagerUser = await User.findById(projectManager);
-        if (!projectManagerUser || !["Admin", "Project Manager"].includes(projectManagerUser.role)) {
+        if (!projectManagerUser) {
             throw ({
-                statusCode: 400,
-                error: "Bad Request",
-                message: "Invalid project manager"
+                statusCode: 404,
+                error: "Not Found",
+                message: `Project manager with id ${projectManager} not found`
             });
-        }
-
-        for (let memberId of teamMembers) {
-            const teamMemberUser = await User.findById(memberId);
-            if (!teamMemberUser) {
-                throw ({
-                    statusCode: 400,
-                    error: "Bad Request",
-                    message: `Invalid team member: ${memberId}`
-                });
-            }
         }
 
         const project = new Project(projectData);
